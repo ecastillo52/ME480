@@ -1,0 +1,473 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from solid import *\n",
+    "from solid.utils import *\n",
+    "import viewscad\n",
+    "from subprocess import run\n",
+    "import time as ti\n",
+    "\n",
+    "r = viewscad.Renderer()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Part I \n",
+    "## Section a"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "application/vnd.jupyter.widget-view+json": {
+       "model_id": "18950aa7fccf45ecba66ff96275f3850",
+       "version_major": 2,
+       "version_minor": 0
+      },
+      "text/plain": [
+       "VBox(children=(HTML(value=''), Renderer(background='#cccc88', background_opacity=0.0, camera=PerspectiveCamera…"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "0.8468186855316162\n",
+      "\n",
+      "\n",
+      "difference() {\n",
+      "\ttranslate(v = [0, 0, -10]) {\n",
+      "\t\tcylinder(h = 20, r = 10);\n",
+      "\t}\n",
+      "\ttranslate(v = [0, 0, -10.5000000000]) {\n",
+      "\t\tcylinder(h = 21, r = 5);\n",
+      "\t}\n",
+      "}\n"
+     ]
+    }
+   ],
+   "source": [
+    "t0 = ti.time()\n",
+    "\n",
+    "c = down(10)(cylinder(r=10, h=20)) - down(10.5)(cylinder(r=5, h=21))\n",
+    "\n",
+    "r.render(c)\n",
+    "\n",
+    "t1 = ti.time()\n",
+    "t1 = t1-t0\n",
+    "\n",
+    "print(t1)\n",
+    "print(scad_render(c))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Section b"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "application/vnd.jupyter.widget-view+json": {
+       "model_id": "2c6d7bb207d747079056494146da5054",
+       "version_major": 2,
+       "version_minor": 0
+      },
+      "text/plain": [
+       "VBox(children=(HTML(value=''), Renderer(background='#cccc88', background_opacity=0.0, camera=PerspectiveCamera…"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "2.139313220977783\n",
+      "\n",
+      "\n",
+      "difference() {\n",
+      "\ttranslate(v = [0, 0, -10]) {\n",
+      "\t\tcylinder(h = 20, r = 10);\n",
+      "\t}\n",
+      "\ttranslate(v = [0, 0, -10.5000000000]) {\n",
+      "\t\tcylinder(h = 21, r = 5);\n",
+      "\t}\n",
+      "\trotate(a = 90, v = [0, 1, 0]) {\n",
+      "\t\ttranslate(v = [0, 0, -10]) {\n",
+      "\t\t\tcylinder(h = 20, r = 5);\n",
+      "\t\t}\n",
+      "\t}\n",
+      "}\n"
+     ]
+    }
+   ],
+   "source": [
+    "t0 = ti.time()\n",
+    "\n",
+    "c = down(10)(cylinder(r=10, h=20)) - down(10.5)(cylinder(r=5, h=21))\n",
+    "a = down(10)(cylinder(r=5, h=20))\n",
+    "d = rotate(a=90, v=[0,1,0])(a)\n",
+    "# e = rotate(a=90, v=[1,0,0])(a)\n",
+    "# b = rotate(a=90)(d)\n",
+    "# b = r.rotate_face_down(a,4)(a)\n",
+    "\n",
+    "# b = c-d-b\n",
+    "# b = c-d-e\n",
+    "b = c-d\n",
+    "\n",
+    "r.render(b)\n",
+    "\n",
+    "t1 = ti.time()\n",
+    "t1 = t1-t0\n",
+    "\n",
+    "print(t1)\n",
+    "print(scad_render(b))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {
+    "scrolled": false
+   },
+   "outputs": [],
+   "source": [
+    "# t0 = ti.time()\n",
+    "\n",
+    "# c = down(10)(cylinder(r=10, h=20)) - down(10.5)(cylinder(r=5, h=21))\n",
+    "# a = down(15)(cylinder(r=2, h=30))\n",
+    "# d = rotate(a=60, v=FORWARD_VEC)(a)\n",
+    "# b = rotate(a=45)(d)\n",
+    "# q = rotate(a=45)(b)\n",
+    "# w = rotate(a=45)(q)\n",
+    "# e = rotate(a=45)(w)\n",
+    "# t = rotate(a=45)(e)\n",
+    "# y = rotate(a=45)(t)\n",
+    "# u = rotate(a=45)(y)\n",
+    "\n",
+    "# b = c-d-b-q-w-e-t-y-u\n",
+    "\n",
+    "# r.render(b)\n",
+    "# print(scad_render(b))\n",
+    "\n",
+    "# t1 = ti.time()\n",
+    "# t1 = t1-t0\n",
+    "# print(t1)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Section c"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "application/vnd.jupyter.widget-view+json": {
+       "model_id": "ce1c960258b34bba8fadcd21d28adc5e",
+       "version_major": 2,
+       "version_minor": 0
+      },
+      "text/plain": [
+       "VBox(children=(HTML(value=''), Renderer(background='#cccc88', background_opacity=0.0, camera=PerspectiveCamera…"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "4.210493087768555\n",
+      "\n",
+      "\n",
+      "union() {\n",
+      "\tdifference() {\n",
+      "\t\ttranslate(v = [0, 0, -10]) {\n",
+      "\t\t\tcylinder(h = 20, r = 10);\n",
+      "\t\t}\n",
+      "\t\ttranslate(v = [0, 0, -10.5000000000]) {\n",
+      "\t\t\tcylinder(h = 21, r = 5);\n",
+      "\t\t}\n",
+      "\t}\n",
+      "\ttranslate(v = [15, 0, 0]) {\n",
+      "\t\tdifference() {\n",
+      "\t\t\ttranslate(v = [0, 0, -10]) {\n",
+      "\t\t\t\tcylinder(h = 20, r = 10);\n",
+      "\t\t\t}\n",
+      "\t\t\ttranslate(v = [0, 0, -10.5000000000]) {\n",
+      "\t\t\t\tcylinder(h = 21, r = 5);\n",
+      "\t\t\t}\n",
+      "\t\t}\n",
+      "\t}\n",
+      "}\n"
+     ]
+    }
+   ],
+   "source": [
+    "t0 = ti.time()\n",
+    "\n",
+    "c_1 = c + right(15)(c)\n",
+    "r.render(c_1)\n",
+    "\n",
+    "t1 = ti.time()\n",
+    "t1 = t1-t0\n",
+    "\n",
+    "print(t1)\n",
+    "print(scad_render(c_1))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {
+    "scrolled": false
+   },
+   "outputs": [],
+   "source": [
+    "# test1 = cube(1)\n",
+    "# test2 = cylinder(r=1, h=1)\n",
+    "# test = minkowski()(\n",
+    "#     cube([20,1,1], center=True),\n",
+    "#     right(15)(cylinder(r=5, h=1))\n",
+    "# )\n",
+    "# r.render(test)\n",
+    "# print(scad_render(test))\n",
+    "\n",
+    "# test1 = cube([10,10,1])\n",
+    "# r.render(test1)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Part II\n",
+    "## Section a"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "data": {
+      "application/vnd.jupyter.widget-view+json": {
+       "model_id": "58ac1a1149994d9ca1c201a31f8014d2",
+       "version_major": 2,
+       "version_minor": 0
+      },
+      "text/plain": [
+       "VBox(children=(HTML(value=''), Renderer(background='#cccc88', background_opacity=0.0, camera=PerspectiveCamera…"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "2.5493907928466797\n",
+      "\n",
+      "\n",
+      "union() {\n",
+      "\tcylinder(h = 2, r = 10);\n",
+      "\tcylinder(h = 10, r = 5);\n",
+      "}\n"
+     ]
+    }
+   ],
+   "source": [
+    "t0 = ti.time()\n",
+    "\n",
+    "c = (cylinder(r=10, h=2)) + (cylinder(r=5, h=10))\n",
+    "\n",
+    "r.render(c)\n",
+    "\n",
+    "t1 = ti.time()\n",
+    "t1 = t1-t0\n",
+    "\n",
+    "print(t1)\n",
+    "print(scad_render(c))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Section b"
+   ]
+  },
+  {
+   "cell_type": "raw",
+   "metadata": {},
+   "source": [
+    "Base Diameter =6.5\n",
+    "Column Diameter =10\n",
+    "Separation Distance =15\n",
+    "Base Height =3\n",
+    "Column Height =15\n",
+    "Base Length = 4*Separation Distance\n",
+    "Base Width =1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {
+    "scrolled": false
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Base Diameter =6.5\n",
+      "Column Diameter =10\n",
+      "Separation Distance =15\n",
+      "Base Height =3\n",
+      "Column Height =15\n",
+      "Base Width =1\n"
+     ]
+    },
+    {
+     "data": {
+      "application/vnd.jupyter.widget-view+json": {
+       "model_id": "793363b446404a38b6c58dd015a2a82f",
+       "version_major": 2,
+       "version_minor": 0
+      },
+      "text/plain": [
+       "VBox(children=(HTML(value=''), Renderer(background='#cccc88', background_opacity=0.0, camera=PerspectiveCamera…"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "\n",
+      "union() {\n",
+      "\tminkowski() {\n",
+      "\t\tcylinder(center = true, h = 3.0000000000, r = 6.5000000000);\n",
+      "\t\tcube(center = true, size = [60.0000000000, 1.0000000000, 3.0000000000]);\n",
+      "\t}\n",
+      "\tcylinder(h = 15.0000000000, r = 5.0000000000);\n",
+      "\ttranslate(v = [15.0000000000, 0, 0]) {\n",
+      "\t\tcylinder(h = 15.0000000000, r = 5.0000000000);\n",
+      "\t}\n",
+      "\ttranslate(v = [30.0000000000, 0, 0]) {\n",
+      "\t\tcylinder(h = 15.0000000000, r = 5.0000000000);\n",
+      "\t}\n",
+      "\ttranslate(v = [-15.0000000000, 0, 0]) {\n",
+      "\t\tcylinder(h = 15.0000000000, r = 5.0000000000);\n",
+      "\t}\n",
+      "\ttranslate(v = [-30.0000000000, 0, 0]) {\n",
+      "\t\tcylinder(h = 15.0000000000, r = 5.0000000000);\n",
+      "\t}\n",
+      "}\n"
+     ]
+    }
+   ],
+   "source": [
+    "Db = float(input('Base Diameter ='))\n",
+    "Dc = float(input('Column Diameter ='))\n",
+    "S = float(input('Separation Distance ='))\n",
+    "Hb = float(input('Base Height ='))\n",
+    "Hc = float(input('Column Height ='))\n",
+    "# Lb = float(input('Base Length ='))\n",
+    "Wb = float(input('Base Width ='))\n",
+    "\n",
+    "sol = minkowski()(cylinder(r=Db, h=Hb, center=True), (cube([4*S,Wb,Hb], center=True))) # Generating the base\n",
+    "sol = sol+cylinder(r=Dc/2, h=Hc)+right(S)(cylinder(r=Dc/2, h=Hc)) # Add first/second Column to the Base\n",
+    "sol += right(2*S)(cylinder(r=Dc/2, h=Hc)) # Add third Column to the base\n",
+    "sol += right(-S)(cylinder(r=Dc/2, h=Hc)) # Add fourth Column to the Base\n",
+    "sol += right(-2*S)(cylinder(r=Dc/2, h=Hc)) # Add fifth Column to the Base\n",
+    "\n",
+    "r.render(sol) # View Shape\n",
+    "print(scad_render(sol)) # Print Scad Code"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# c = cylinder(r=5, h=2) \n",
+    "# c -= minkowski()(up(1)(cylinder(r=3, h=1.5)),  \n",
+    "#                                 up(1.5)(sphere(r=2))) \n",
+    "# c -= cylinder(r=1,\n",
+    "#               h=3,\n",
+    "#               center=True) \n",
+    "# c -= translate([0,-1,0])(cube([6,2,3]))\n",
+    "\n",
+    "# r.render(c)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
